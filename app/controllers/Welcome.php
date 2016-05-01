@@ -20,7 +20,5 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
-        $a = 1/0;
-        echo 'asdf';
 	}
 }
