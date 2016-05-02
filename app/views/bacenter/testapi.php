@@ -42,6 +42,15 @@
 <div><input type="submit" value="Submit" /></div>
 </form>
 <br/>
+<div>
+<?php
+if(!empty($result)) {
+    echo '原格式:',$result,'<br/>','json_decode:';
+    $result = json_decode($result,true);
+    print_r($result);
+}
+?>
+</div>
 <a href="/bacenter">ba中心</a><br>
    </body>
 </html>

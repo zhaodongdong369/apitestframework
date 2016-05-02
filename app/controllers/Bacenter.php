@@ -52,7 +52,6 @@ class Bacenter extends CI_Controller
             redirect("/user/login");
         }
         $this->form_validation->set_rules('url', 'Url', 'required');    
-        $this->form_validation->set_rules('args', 'Args', 'required');
         if($this->form_validation->run() == FALSE) {
             $this->load->view('/bacenter/addapi');
         }else {
@@ -89,12 +88,37 @@ class Bacenter extends CI_Controller
         $vars = array(
             'apis' => $apis,
             'bas' => $bas,
+            'result' => '',
             );
         $this->form_validation->set_rules('api', 'Api', 'required');    
         $this->form_validation->set_rules('ba', 'Ba', 'required');
         if($this->form_validation->run() == FALSE) {
             $this->load->view('/bacenter/testapi', $vars);
         }else {
+            require 'CUrlHttp.php';
+            $api_query = $this->db->query("select id,url,args from apilist where id={$_POST['api']}");
+            $ba_query  = $this->db->query("select id,appkey,secretkey from balist where id={$_POST['ba']}");
+            $api = $api_query->result();
+            if(empty($api)) {
+                $this->load->view("/bacenter/testapi", $vars);
+                return;
+            }
+            $api = $api[0];
+            $ba = $ba_query->result();
+            if(empty($ba)) {
+                $this->load->view("/bacenter/testapi", $vars);
+                return;
+            }
+            $ba = $ba[0];
+            $url = $api->url;
+            $authinfo = array(
+                'client_id' => $ba->appkey,
+                'client_secret' => $ba->secretkey,
+                );
+            $retcode = 0;
+            $curl = new CUrlHttp();
+            $ret  = $curl->RESTRequest($url, $_POST['args'], $retcode,  $_POST['HTTP'], null, $authinfo);
+            $vars['result'] = $ret;
             $this->load->view("/bacenter/testapi", $vars);
         }
     }
