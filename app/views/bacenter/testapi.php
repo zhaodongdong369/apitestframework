@@ -70,22 +70,26 @@ if(!empty($result)) {
         </div><!--/.container-fluid -->
       </nav>
 <script language="javascript">
-function changeF() {
+ var argslist= new Array();
+<?php 
+if(!empty($apis)) {
+    $i=0;
+    foreach($apis as $api) {
+?>
+    argslist[<?php echo $i++;?>] = <?php
+        if(empty($api->args)) {
+            echo '{}';
+        } 
+        echo $api->args;?>;
+<?php
+    }
+}?>
+    function changeF() {
     document.getElementById('api').value = document.getElementById('sel').options[document.getElementById('sel').selectedIndex].text;
     document.getElementById('args').value = document.getElementById('sel').options[document.getElementById('sel').selectedIndex].value;
-    var json = {  
-       "string": "foo",  
-       "number": 5,  
-       "array": [1, 2, 3],  
-       "object": {  
-         "property": "value",  
-         "subobj": {  
-         "arr": ["foo", "ha"],  
-         "numero": 1  
-       }  
-    }};  
+    var json = argslist[document.getElementById('sel').selectedIndex-1];
     $('#jsonde').jsonEditor(json, {change: function(data){
-        $('#jsondepre').html(JSON.stringify(data));
+        $('#args').val(JSON.stringify(data));
     }
     });
 } 
