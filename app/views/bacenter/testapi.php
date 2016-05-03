@@ -12,8 +12,21 @@
 
     <!-- Bootstrap core CSS -->
     <link href="/assert/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Json view -->
+    <link href="/assert/css/jquery.jsonview.css" />
+    <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+    <script type="text/javascript" src="/assert/js/jquery.jsonview.js"></script>
+    <script type="text/javascript">
+    $(function() {
+ <?php
+if(!empty($result)) {
+    echo '$("#json").JSONView('.$result.')';
+}
+?>
+    });
 
-
+    </script>
+ 
     <!-- Custom styles for this template -->
     <link href="/assert/css/navbar.css" rel="stylesheet">
 
@@ -51,23 +64,25 @@
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
       </nav>
+<script language="javascript">
+function changeF() {
+    document.getElementById('api').value = document.getElementById('sel').options[document.getElementById('sel').selectedIndex].text;
+    document.getElementById('args').value = document.getElementById('sel').options[document.getElementById('sel').selectedIndex].value;
+} 
+</script> 
 </head>
 <body>
 
 <form action="/bacenter/testapi" method="POST" role="form">
     <div class="form-group">
-        <span class="label label-info">提示
-            <?php echo validation_errors(); ?>
-        </span>
-    </div>
-    <div class="form-group">
         <label for="api">接口<label>
-        <select name="api" class="form-control">
+        <select  id="sel" class="form-control" onchange="changeF();">
+            <option value=''>请选择</option>
         <?php 
             if(!empty($apis)) {
                 foreach($apis as $api) {
         ?>
-       <option value="<?php echo $api->id;?>"><?php echo $api->url;?></option>
+       <option value="<?php echo htmlentities($api->args);?>"><?php echo $api->url;?></option>
        <?php
                 }
             }
@@ -75,8 +90,11 @@
         </select>
     </div>
     <div class="form-group">
+        <input type="url" name="api" id="api" value="<?php echo set_value('api');?>" class="form-control input-group-lg" />
+    </div>
+    <div class="form-group">
         <label for="args">参数</label>
-        <input type="text" name="args" class="form-control" value="<?php echo set_value('args');?>" />
+        <textarea type="text" name="args" class="form-control"   id="args"><?php echo set_value('args');?></textarea>
     </div>
     <div class="form-group">
         <label for="ba">ba</label>
@@ -101,13 +119,9 @@
     <div>
     <button type="submit" class="btn btn-default"/>测试</button>
 </form>
-<?php
-if(!empty($result)) {
-    echo '原格式:',$result,'<br/>','json_decode:';
-    $result = json_decode($result,true);
-    print_r($result);
-}
-?>
+<h5>结果</h5>
+<div id="json">
+</div>
 </body>
 </html>
 

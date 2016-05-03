@@ -96,21 +96,18 @@ class Bacenter extends CI_Controller
             $this->load->view('/bacenter/testapi', $vars);
         }else {
             require 'CUrlHttp.php';
-            $api_query = $this->db->query("select id,url,args from apilist where id={$_POST['api']}");
+            $url = $_POST['api'];
             $ba_query  = $this->db->query("select id,appkey,secretkey from balist where id={$_POST['ba']}");
-            $api = $api_query->result();
-            if(empty($api)) {
+            if(empty($url)) {
                 $this->load->view("/bacenter/testapi", $vars);
                 return;
             }
-            $api = $api[0];
             $ba = $ba_query->result();
             if(empty($ba)) {
                 $this->load->view("/bacenter/testapi", $vars);
                 return;
             }
             $ba = $ba[0];
-            $url = $api->url;
             $authinfo = array(
                 'client_id' => $ba->appkey,
                 'client_secret' => $ba->secretkey,
