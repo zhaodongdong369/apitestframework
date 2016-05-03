@@ -14,8 +14,11 @@
     <link href="/assert/css/bootstrap.min.css" rel="stylesheet">
     <!-- Json view -->
     <link href="/assert/css/jquery.jsonview.css" />
-    <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+    <!-- Json  editor -->
+    <link href="/assert/css/jsoneditor.css" />
+    <script type="text/javascript" src="/assert/js/jquery.min.js"></script>
     <script type="text/javascript" src="/assert/js/jquery.jsonview.js"></script>
+    <script type="text/javascript" src="/assert/js/jquery.jsoneditor.js"></script> 
     <script type="text/javascript">
     $(function() {
  <?php
@@ -70,6 +73,21 @@ if(!empty($result)) {
 function changeF() {
     document.getElementById('api').value = document.getElementById('sel').options[document.getElementById('sel').selectedIndex].text;
     document.getElementById('args').value = document.getElementById('sel').options[document.getElementById('sel').selectedIndex].value;
+    var json = {  
+       "string": "foo",  
+       "number": 5,  
+       "array": [1, 2, 3],  
+       "object": {  
+         "property": "value",  
+         "subobj": {  
+         "arr": ["foo", "ha"],  
+         "numero": 1  
+       }  
+    }};  
+    $('#jsonde').jsonEditor(json, {change: function(data){
+        $('#jsondepre').html(JSON.stringify(data));
+    }
+    });
 } 
 </script> 
 </head>
@@ -94,6 +112,8 @@ function changeF() {
     <div class="form-group">
         <input type="url" name="api" id="api" value="<?php echo set_value('api');?>" class="form-control input-group-lg" />
     </div>
+    <div id="jsonde" class="json-editor"></div>
+    <pre id="jsondepre"></pre>
     <div class="form-group">
         <label for="args">参数</label>
         <textarea type="text" name="args" class="form-control" rows=14   id="args"><?php echo set_value('args');?></textarea>

@@ -30,12 +30,12 @@ CREATE TABLE `apilist` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userid` int(11) NOT NULL,
   `url` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
-  `args` varchar(1000) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `status` int not null default 1,
+  `args` blob,
+  `status` int(11) NOT NULL DEFAULT '1',
   `mtime` int(11) DEFAULT NULL,
   `ctime` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 #api2ba api与ba的绑定关系表
 CREATE TABLE `api2ba` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
