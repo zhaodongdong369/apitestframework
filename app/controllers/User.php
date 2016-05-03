@@ -58,7 +58,7 @@ class User extends CI_Controller
 
     protected function checkUser($username, $password)
     {
-        $hash = password_hash($password, PASSWORD_BCRYPT, array(
+        echo $hash = password_hash($password, PASSWORD_BCRYPT, array(
             'salt' => 'jsadf32^$&jasdfouppawefjwaof22342432adsfa'));
         $query = $this->db->query("select id,name,email from apiuser where name='{$username}' and passhash='{$hash}' and status=1");
         return $query->row_array();
