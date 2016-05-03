@@ -96,7 +96,7 @@ function changeF() {
     </div>
     <div class="form-group">
         <label for="args">参数</label>
-        <textarea type="text" name="args" class="form-control"   id="args"><?php echo set_value('args');?></textarea>
+        <textarea type="text" name="args" class="form-control" rows=14   id="args"><?php echo set_value('args');?></textarea>
     </div>
     <div class="form-group">
         <label for="ba">ba</label>

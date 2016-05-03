@@ -64,7 +64,7 @@
     </div>
     <div class="form-group">
         <label for="args">参数</label>
-        <input type="text" name="args" class="form-control" value="<?php echo set_value('args');?>" />
+        <textarea type="text" name="args" class="form-control" rows='12' placeholder='只有POST接口需要填写，只需要填入json格式的demo参数,如cdc4.2删除资质接口{"corpid":393575,"qualificationid":5647,"qualificationtypeid":203,"creatorid":21,"creatortype":33}'><?php echo set_value('args');?></textarea>
     <div>
     <button type="submit" class="btn btn-default">添加接口</button>
 </form>
