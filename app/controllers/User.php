@@ -24,7 +24,7 @@ class User extends CI_Controller
             $this->load->view('user/login.php');
         }else {
             $username = $_POST['username'];
-            $password = $_POST['passworrd'];
+            $password = $_POST['password'];
             $checkUser = $this->checkUser($username, $password);
             if($checkUser) {
                 $_SESSION['user'] = $checkUser;
@@ -58,10 +58,17 @@ class User extends CI_Controller
 
     protected function checkUser($username, $password)
     {
-        $hash = password_hash($password, PASSWORD_BCRYPT, array(
+     $hash = password_hash($password, PASSWORD_BCRYPT, array(
             'salt' => 'jsadf32^$&jasdfouppawefjwaof22342432adsfa'));
-        $query = $this->db->query("select id,name,email from apiuser where name='{$username}' and passhash='{$hash}' and status=1");
-        return $query->row_array();
+      $query = $this->db->query("select id,name,email from apiuser where name='{$username}' and passhash='{$hash}' and status=1");
+      return $query->row_array();
+    }
+    
+    //注销登陆
+    public function logout()
+    {
+        unset($_SESSION['user']);
+        redirect("/user/login");
     }
 
     //登陆逻辑 

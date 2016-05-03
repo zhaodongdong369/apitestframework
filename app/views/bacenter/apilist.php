@@ -47,6 +47,7 @@
               <li><a href="/bacenter/addapi">添加api接口</a></li>
               <li class='active'><a href="/bacenter/apilst">api列表</a></li>
               <li> <a href="/bacenter/testapi">测试接口</a></li>
+              <li><a href="/user/logout">注销</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->

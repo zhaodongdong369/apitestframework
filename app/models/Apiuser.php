@@ -9,7 +9,8 @@ class Apiuser extends CI_Model
     public function addUser()
     {
         $this->name = $_POST['username'];
-        $this->passhash = password_hash($_POST['password'], PASSWORD_BCRYPT);
+        $this->passhash = password_hash($_POST['password'], PASSWORD_BCRYPT, array(
+            'salt' => 'jsadf32^$&jasdfouppawefjwaof22342432adsfa'));
         $check = $this->db->query("select * from apiuser where name='{$this->name}'");
         $check = $check->result();
         if($check) {

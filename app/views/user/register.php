@@ -1,26 +1,35 @@
-<html>
-<head>
-<title>My Form</title>
-</head>
-<body>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>用户登陆</title>
 
+    <!-- Bootstrap -->
+    <link href="/assert/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assert/css/signin.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
 <?php echo validation_errors(); ?>
-
-<?php echo form_open('/user/register'); ?>
-
-<h5>Username</h5>
-<input type="text" name="username" value="<?php echo set_value('username'); ?>" size="50" />
-
-<h5>Password</h5>
-<input type="text" name="password" value="<?php echo set_value('password');?>" size="50" />
-<h5>PasswordConf<h5>
-<input type="text" name="passconf" value="<?php echo set_value('passconf');?>" size="50" />
-<h5>email</h5>
-<input type="text" name="email" value="<?php echo set_value('email');?>" size="50" />
-
-<div><input type="submit" value="Submit" /></div>
-
-</form>
-<a href='/user/login'>登陆</a>
+    <form class="form-signin" action="/user/register" method="POST">
+        <label for="inputName" class="sr-only">用户名</label>
+        <input type="text" id="inputName" name="username" class="form-control" value="<?php echo set_value('username'); ?>" placeholder="用户名" required autofocus>
+        <label for="inputPassword" class="sr-only">密码</label>
+        <input type="password" id="inputPassword" name="password" value="<?php echo set_value('password');?>" class="form-control" placeholder="Password" required>
+        <label for="inputPassword" class="sr-only">确认密码</label>
+        <input type="password" id="inputPassword" name="passconf" value="<?php echo set_value('passconf');?>" class="form-control" placeholder="Passconf" required>
+        <label for="inputPassword" class="sr-only">邮箱</label>
+        <input type="email" id="inputPassword" name="email" value="<?php echo set_value('email');?>" class="form-control" placeholder="Email" required>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">注册</button>
+      </form>
 </body>
 </html>

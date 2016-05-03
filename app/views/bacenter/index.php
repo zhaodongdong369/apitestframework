@@ -47,6 +47,7 @@
               <li><a href="/bacenter/addapi">添加api接口</a></li>
               <li><a href="/bacenter/apilist">api列表</a></li>
               <li> <a href="/bacenter/testapi">测试接口</a></li>
+              <li><a href="/user/logout">注销</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
@@ -54,10 +55,10 @@
 
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
-        <h1>测试中心demo</h1>
-        <p>接口测试说明   </p>
+        <h1>后台接口测试中心</h1>
+        <p>接口测试说明</p>
         <p>
-          <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">查看详情 &raquo;</a>
+    步骤：1.注册 2.登陆 3.添加ba认证资料 4.添加api接口 5.测试接口
         </p>
       </div>
 
