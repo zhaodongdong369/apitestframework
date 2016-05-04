@@ -8,23 +8,21 @@
     <meta name="description" content="测试首页">
     <meta name="author" content="zhaodongdong">
 
-    <title>ba列表</title>
+    <title>更新ba认证</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/assert/css/bootstrap.min.css" rel="stylesheet">
 
 
     <!-- Custom styles for this template -->
-    <link href="/assert/css/navbar.css" rel="stylesheet">
-
+      <link href="/assert/css/navbar.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-
-  <body>
+<body>
 
     <div class="container">
 
@@ -52,30 +50,19 @@
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
       </nav>
-    </head>
-    <body>
-    <table class="table table-striped table-bordered table-hover table-responsive">
-        <caption>ba列表</caption>
-        <thead>
-            <tr>
-                <th>删除</th>
-                <th>更新</th>
-                <th>APPKEY</th>
-                <th>SECRET KEY</th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php
-            if(!empty($bas)) {
-                foreach($bas as $ba) {
-                    $delurl = '<a href="/bacenter/delba/'.$ba->id.'">删除</a>';
-                    $updateurl = '<a href="/bacenter/updateba/'.$ba->id.'">更新</a>';
-                    echo "<tr><td>{$delurl}</td><td> {$updateurl}</td><td> {$ba->appkey}</td><td>{$ba->secretkey}</td></tr>";
-                }
-            }
-        ?>
-        </tbody>
-    </table>
-   </body>
-</html>
 
+ 
+<?php echo validation_errors(); ?>
+<form action="/bacenter/updateba/<?php echo $ba->id;?>" method="POST" role="form">
+    <div class="form-group">
+        <label for="appkey">APP KEY</label>
+        <input type="text" name="appkey" class="form-control" value="<?php echo $ba->appkey; ?>" required autofocus />
+    </div>
+    <div class="form-group">
+        <label for="secretkey">SECRET  KEY</label>
+        <input type="text" name="secretkey" class="form-control" value="<?php echo $ba->secretkey;?>" required />
+    <div>
+    <button type="submit" class="btn btn-default">更新</button>
+</form>
+</body>
+</html>

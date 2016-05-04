@@ -8,7 +8,7 @@
     <meta name="description" content="测试首页">
     <meta name="author" content="zhaodongdong">
 
-    <title>ba列表</title>
+    <title>更新接口</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/assert/css/bootstrap.min.css" rel="stylesheet">
@@ -43,39 +43,30 @@
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li><a href="/bacenter/addba">添加ba认证资料</a></li>
-              <li class="active"><a href="/bacenter/balist">ba列表</a></li>
+              <li><a href="/bacenter/balist">ba列表</a></li>
               <li><a href="/bacenter/addapi">添加api接口</a></li>
-              <li><a href="/bacenter/apilist">api列表</a></li>
+              <li class="active"><a href="/bacenter/apilist">api列表</a></li>
               <li> <a href="/bacenter/testapi">测试接口</a></li>
-              <li><a href="/user/logout">注销</a></li>
+              <li> <a href="/user/logout">注销</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
       </nav>
-    </head>
-    <body>
-    <table class="table table-striped table-bordered table-hover table-responsive">
-        <caption>ba列表</caption>
-        <thead>
-            <tr>
-                <th>删除</th>
-                <th>更新</th>
-                <th>APPKEY</th>
-                <th>SECRET KEY</th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php
-            if(!empty($bas)) {
-                foreach($bas as $ba) {
-                    $delurl = '<a href="/bacenter/delba/'.$ba->id.'">删除</a>';
-                    $updateurl = '<a href="/bacenter/updateba/'.$ba->id.'">更新</a>';
-                    echo "<tr><td>{$delurl}</td><td> {$updateurl}</td><td> {$ba->appkey}</td><td>{$ba->secretkey}</td></tr>";
-                }
-            }
-        ?>
-        </tbody>
-    </table>
-   </body>
-</html>
+</head>
+<body>
 
+<?php echo validation_errors(); ?>
+
+<form action="/bacenter/updateapi/<?php echo $api->id;?>" method="POST" role="form">
+    <div class="form-group">
+        <label for="url">接口地址</label>
+        <input type="url" name="url" class="form-control" value="<?php echo $api->url; ?>" required autofocus />
+    </div>
+    <div class="form-group">
+        <label for="args">参数</label>
+        <textarea type="text" name="args" class="form-control" rows='12' placeholder='只有POST接口需要填写，只需要填入json格式的demo参数,如cdc4.2删除资质接口{"corpid":393575,"qualificationid":5647,"qualificationtypeid":203,"creatorid":21,"creatortype":33}'><?php echo $api->args;?></textarea>
+    <div>
+    <button type="submit" class="btn btn-default">更新接口</button>
+</form>
+</body>
+</html>

@@ -12,4 +12,13 @@ class Apilist extends CI_Model
         $this->db->insert('apilist', $this);
         return $this;
     }
+
+    //更新api
+    public function updateApi($apiid)
+    {
+        $this->url = $_POST['url'];
+        $this->args = $_POST['args'];
+        $this->mtime = time();
+        $this->db->update('apilist', $this, array('id' => $apiid));
+    }
 }

@@ -45,7 +45,7 @@
               <li><a href="/bacenter/addba">添加ba认证资料</a></li>
               <li><a href="/bacenter/balist">ba列表</a></li>
               <li><a href="/bacenter/addapi">添加api接口</a></li>
-              <li class='active'><a href="/bacenter/apilst">api列表</a></li>
+              <li class='active'><a href="/bacenter/apilist">api列表</a></li>
               <li> <a href="/bacenter/testapi">测试接口</a></li>
               <li><a href="/user/logout">注销</a></li>
             </ul>
@@ -58,6 +58,8 @@
         <caption>ba列表</caption>
         <thead>
             <tr>
+                <th>删除</th>
+                <th>更新</th>
                 <th>接口地址</th>
                 <th>参数</th>
             </tr>
@@ -66,7 +68,9 @@
         <?php
             if(!empty($apis)) {
                 foreach($apis as $api) {
-                    echo "<tr><td> {$api->url}</td><td>{$api->args}</td></tr>";
+                    $delurl = '<a href="/bacenter/delapi/'.$api->id.'">删除</a>';
+                    $updateurl = '<a href="/bacenter/updateapi/'.$api->id.'">更新</a>';
+                    echo "<tr><td>{$delurl}</td><td> {$updateurl}</td><td> {$api->url}</td><td>{$api->args}</td></tr>";
                 }
             }
         ?>

@@ -18,4 +18,14 @@ class Balist extends CI_Model
         $this->db->insert('balist', $this);
         return $this;
     }
+
+    //更新ba
+    public function updateBa($baid)
+    {
+        $this->appkey = $_POST['appkey'];
+        $this->secretkey = $_POST['secretkey'];
+        $this->mtime = time();
+        $this->db->update('balist', $this, array('id' => $baid));
+    }
+
 }
