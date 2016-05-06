@@ -1,13 +1,13 @@
 build_settings:
     clone_depth: 1 # depth of 1 is a shallow clone, remove this line to clone entire repo
-    ignore:[ "vendor","tests"]
+    ignore:[vendor,tests]
     mysql:
         host: "localhost"
         user: "admin"
         pass: "admin"
 
 setup:
-    mysql:["DROP DATABASE IF EXISTS test;","CREATE DATABASE test;", "GRANT ALL PRIVILEGES ON test.* TO test@'localhost' IDENTIFIED BY 'test';"]
+    mysql:['DROP DATABASE IF EXISTS test;',"CREATE DATABASE test;", "GRANT ALL PRIVILEGES ON test.* TO test@'localhost' IDENTIFIED BY 'test';"]
 
 complete:
     mysql:
