@@ -1,4 +1,7 @@
 <?php
+/**
+测试
+*/
 class Apilist extends CI_Model 
 {
     public function addApi()
