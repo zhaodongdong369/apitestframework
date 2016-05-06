@@ -13,4 +13,6 @@ test:
         path: 'app/controllers'
         ignore: 'app/views'
         standard: 'PEAR'
+        allowed_warnings: 10
+        allowed_errors: 3
         path: '/usr/bin/phpcs'
