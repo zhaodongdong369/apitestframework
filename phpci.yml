@@ -8,17 +8,9 @@ build_settings:
         user: "admin"
         pass: "admin"
 
-setup:
-    mysql:['DROP DATABASE IF EXISTS test;', "CREATE DATABASE test;", "GRANT ALL PRIVILEGES ON test.* TO test@'localhost' IDENTIFIED BY 'test';"]
-
 test:
     php_code_sniffer:
         path: 'app/controllers'
         ignore: 'app/views'
         standard: 'PEAR'
-        allowd_errors:1
-complete:
-    mysql:
-        host: "localhost"
-        user: "admin"
-        pass: "admin"
+        path: '/usr/bin/phpcs'
