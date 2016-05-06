@@ -1,35 +1,68 @@
 <?php
+/**
+ * CurlHttp
+ *
+ * PHP Version 5.3
+ *
+ * @category  CUrlHttp
+ * @package   Api
+ * @author    zhaodongdong <1562122082@qq.com>
+ * @copyright 2015 phpstudylab.cn
+ * @license   PHP Version 5.3
+ * @link      http://www.phpstudylab.cn
+ */
+
+
+/**
+ * CUrlHttp description
+ *
+ * @category   CUrlHttp
+ * @package    Api
+ * @author     zhaodongdong <1562122082@qq.com>
+ * @copyright  1997-2005 The PHP Group
+ * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
+ * @version    Release: @package_version@
+ * @link       http://pear.php.net/package/PackageName
+ * @see        NetOther, Net_Sample::Net_Sample()
+ * @since      Class available since Release 1.2.0
+ * @deprecated Class deprecated in Release 2.0.0
+ */
 
 class CUrlHttp
 {
     /**
-     * cookie 字符串
+     * Cookie 字符串
      * 用于CURLOPT_COOKIE
+     *
      * @var String
      */
-    private $cookiestr;
+    private $_cookiestr;
     /**
-     * cookie 前缀
+     * Cookie 前缀
      */
     public $cookie_prefix;
     /**
      * 最近一次访问url
+     *
      * @var String
      */
     public $location;
     /**
-     * curl资源
+     * Curl资源
+     *
      * @var Resource
      */
-    private $curl;
+    protected $curl;
     /**
-     * cookie数组
+     * Cookie数组
+     *
      * @var Array
      */
     public $cookie;
 
     /**
      * 是否开启debug模式
+     *
      * @var Boolean
      */
     public $debug;
@@ -50,6 +83,7 @@ class CUrlHttp
     );
     /**
      * 自定义的请求方式
+     *
      * @var String
      */
     public $customMethod = null;
@@ -62,43 +96,51 @@ class CUrlHttp
     /**
      * 持久连接超时
      * 为0时禁用持久链接
+     *
      * @var Integer
      */
     public $keepAlive = 300;
 
     /**
+     * 认证信息
+     *
      * @var array BA 认证信息
      */
     protected $authData;
 
     /**
+     * 电影认证信息
+     *
      * @var array 电影认证信息
      */
     protected $movieAuthData;
     
     /**
      * 用户代理
+     *
      * @var String
      */
     public $userAgent = 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 1.1.4322)';
     /**
      * 全局超时
+     *
      * @var Integer
      */
     protected $globalTimeout = 30;
     /**
      * 连接超时
+     *
      * @var Integer
      */
     protected $connTimeout = 10;
     /**
      * 是否使用证书
+     *
      * @var Bool
      */
     public $useCert = false;
     /**
      * 若使用了证书要设置的属性
-     *
      */
     // 重设header
     public $sslHeader = array();
@@ -114,9 +156,10 @@ class CUrlHttp
     /**
      * 构造函数
      *
-     * @param Array $conf
-     *        其中globalTimeout和connTimeout单位为秒，
-     *        但可以使用小数，以实现按毫秒设置超时
+     * @param Array $conf 其中globalTimeout和connTimeout单位为秒，但可以使用小数，以实现按毫秒设置超时
+     *
+     * @access public
+     * @return nul
      */
     public function __construct($conf = null)
     {
@@ -126,25 +169,55 @@ class CUrlHttp
                 $this->$key = $val;
             }
         }
-        $this->curlInit();
+        $this->_curlInit();
     }
 
+    /**
+     * 析构函数  
+     *
+     * @access public
+     * @return null
+     */
     public function __destruct()
     {
         is_resource($this->curl) && curl_close($this->curl);
     }
-
+    
+    /**
+     * 关闭curl
+     *
+     * @access public
+     * @return null
+     */
     public function curlClose()
     {
         is_resource($this->curl) && curl_close($this->curl);
     }
-
+    
+    /**
+     * 设置curl选项
+     *
+     * @param var $key key
+     * @param var $val val
+     *
+     * @access public
+     * @return null
+     */
     public function setOpt($key, $val)
     {
         curl_setopt($this->curl, $key, $val);
     }
-
-    public function setGlobalTimeout($timeout) {
+    
+    /**
+     * 设置全局超时时间
+     *
+     * @param int $timeout 全局超时时间
+     *
+     * @access public
+     * @return null
+     */
+    public function setGlobalTimeout($timeout) 
+    {
         $this->globalTimeout = $timeout;
         $this->setOpt(CURLOPT_TIMEOUT_MS, $timeout * 1000);
 
@@ -154,8 +227,16 @@ class CUrlHttp
             $this->setOpt(CURLOPT_NOSIGNAL, 1);
         }
     }
-
-    public function setConnTimeout($timeout) {
+    /**
+     * 设置连接超时时间
+     *
+     * @param int $timeout 连接超时时间
+     *
+     * @access public
+     * @return null
+     */
+    public function setConnTimeout($timeout) 
+    {
         $this->connTimeout = $timeout;
         $this->setOpt(CURLOPT_CONNECTTIMEOUT_MS, $timeout * 1000);
 
@@ -169,14 +250,17 @@ class CUrlHttp
     /**
      * 初始化curl资源
      *
+     * @access private
+     * @return null
      */
-    private function curlInit()
+    private function _curlInit()
     {
         // init
         $this->curl = curl_init();
         // cookie truncate
         $this->cookie = array();
-        curl_setopt_array($this->curl, array(
+        curl_setopt_array(
+            $this->curl, array(
             // gzip
             CURLOPT_ENCODING => $this->enableGZip ? 'gzip,deflate' : 0 ,
             // use return
@@ -196,7 +280,8 @@ class CUrlHttp
             // enable HTTPS
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_SSL_VERIFYHOST => false,
-        ));
+            )
+        );
 
         // 如果设置小于1s的超时，CURL会在DNS解析阶段立即超时
         // 设置 CURLOPT_NOSIGNAL 为1可以绕开这一问题
@@ -208,23 +293,27 @@ class CUrlHttp
     /**
      * 更新cookie
      *
+     * @access public
+     * @return null
      */
     public function refreshCookie()
     {
-        $this->cookiestr = '';
+        $this->_cookiestr = '';
         foreach ($this->cookie as $key => $val) {
-            $this->cookiestr .= $key . '=' . $val . '; ';
+            $this->_cookiestr .= $key . '=' . $val . '; ';
         }
         if ((!empty($this->cookie_prefix)) && count($this->cookie) !== 0) {
-            $this->cookiestr = $this->cookie_prefix . '; ' . $this->cookiestr;
+            $this->_cookiestr = $this->cookie_prefix . '; ' . $this->_cookiestr;
         }
-        $this->cookiestr && curl_setopt($this->curl, CURLOPT_COOKIE, $this->cookiestr);
+        $this->_cookiestr && curl_setopt($this->curl, CURLOPT_COOKIE, $this->_cookiestr);
     }
 
     /**
-     * 根据parse_url数组拼接url
-     * parse_url的函数
-     * @param  Array  $arr
+     * 根据parse_url数组拼接urlparse_url的函数
+     *
+     * @param array $arr 数据
+     *
+     * @access public
      * @return String
      */
     public static function glueUrl($arr)
@@ -244,20 +333,44 @@ class CUrlHttp
 
         return $u;
     }
-
+    /**
+     * 设置认证信息
+     *
+     * @param string $client_id     appkey
+     * @param string $client_secret secretkey
+     *
+     * @access public
+     * @return String
+     */
     public function setAuthInfo($client_id, $client_secret)
     {
         $this->authData = array(
                 'id'        => $client_id,
                 'secret'    => $client_secret,
-            );
+        );
     }
 
+    /**
+     * 设置请求方式
+     *
+     * @param var $method 请求方式
+     *
+     * @access public
+     * @return null
+     */
     public function setCustomMethod($method)
     {
         $this->customMethod = $method;
     }
-
+    
+    /**
+     * 添加header头
+     *
+     * @param array $header header头
+     *
+     * @access public
+     * @return null
+     */
     public function addHeader($header)
     {
         $this->header[] = $header;
@@ -266,15 +379,17 @@ class CUrlHttp
     /**
      * 执行http请求
      *
-     * @param  String $url 请求url
-     * @param  String &$body 响应文本
-     * @param  String $charset 响应字符集 (为空则不转换)
-     * @param  Boolean $isPost 是否为post请求
-     * @param  Mixed $postData post数据
-     * @param  bool $isMulti
+     * @param String  $url      请求url
+     * @param String  $body     响应文本
+     * @param String  $charset  响应字符集 (为空则不转换)
+     * @param Boolean $isPost   是否为post请求
+     * @param Mixed   $postData post数据
+     * @param bool    $isMulti  是否是multi表单
+     *
+     * @access private
      * @return Mixed   false:成功; String:失败信息
      */
-    private function httpExec($url, &$body, $charset, $isPost, $postData = null, $isMulti = false)
+    private function _httpExec($url, &$body, $charset, $isPost, $postData = null, $isMulti = false)
     {
         // 更新cookie
         $this->refreshCookie();
@@ -284,7 +399,7 @@ class CUrlHttp
         $header = $this->header;
         if ($isMulti) {
             $header[] = 'Content-Type: multipart/form-data; boundary=' . OAuthUtil::$boundary ;
-            $header[] = 'Content-Length: ' . strlen($postData) ;
+            $header[] = 'Content-Length: ' . strlen($postData);
             $header[] = "SaeRemoteIP: " . $_SERVER['REMOTE_ADDR'];
             $header[] = "Expect: ";
         }
@@ -336,9 +451,9 @@ class CUrlHttp
         //curl_setopt($this->curl, CURLOPT_REFERER, $this->location);
 
         if ($this->useCert) {
-            $this->setCertOpt();
+            $this->_setCertOpt();
         }
-        curl_setopt($this->curl, CURLOPT_HEADERFUNCTION, array($this, 'readHeaderCallback'));
+        curl_setopt($this->curl, CURLOPT_HEADERFUNCTION, array($this, '_readHeaderCallback'));
         // 执行请求
         $body = curl_exec($this->curl);
         $errorCode = curl_errno($this->curl);
@@ -358,18 +473,20 @@ class CUrlHttp
             $result = $this->getErrMsg();
         }
 
-        curl_setopt($this->curl, CURLOPT_HEADERFUNCTION, 'self::emptyHeaderCallback');
+        curl_setopt($this->curl, CURLOPT_HEADERFUNCTION, 'self::_emptyHeaderCallback');
         return $result;
     }
 
     /**
-     * header处理回调
+     * Header处理回调
      *
-     * @param  Resource $_nouse
-     * @param  String   $header 一行header
+     * @param Resource $_nouse nouse
+     * @param String   $header 一行header
+     *
+     * @access private
      * @return Integer
      */
-    private function readHeaderCallback($_nouse, $header)
+    private function _readHeaderCallback($_nouse, $header)
     {
         // 设置 location
         if (!strncmp($header, "Location:", 9)) {
@@ -394,32 +511,70 @@ class CUrlHttp
 
         return strlen($header);
     }
-
-    private static function emptyHeaderCallback($_nouse, $header)
+    /**
+     * 回调函数
+     *
+     * @param var $_nouse nouse
+     * @param var $header header
+     *
+     * @access private
+     * @return null
+     */
+    private static function _emptyHeaderCallback($_nouse, $header)
     {
     }
 
-    private function cmp($a, $b)
+    /**
+     * 比较
+     *
+     * @param var $a 参数a
+     * @param var $b 参数b
+     *
+     * @access protected
+     * @return null
+     */
+    protected function cmp($a, $b)
     {
         return strcasecmp($a, $b);
     }
-
+        
+    /**
+     * 获取http code
+     *
+     * @access public
+     * @return null
+     */
     public function getHttpCode()
     {
         return curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
     }
-
+    /**
+     * 获取curl错误编码
+     *
+     * @access pubic
+     * @return int
+     */
     public function getErrNo()
     {
         return curl_errno($this->curl);
     }
-
+     /**
+     * 获取curl出错信息
+     *
+     * @access public
+     * @return string
+     */
     public function getErrMsg()
     {
         return 'errno=' . curl_errno($this->curl) . ' error=' . curl_error($this->curl);
     }
-
-    private function setCertOpt()
+     /**
+     * 设置认证信息
+     *
+     * @access private
+     * @return string
+     */
+    private function _setCertOpt()
     {
         // 设置https端口
         if (!empty($this->sslPort)) {
@@ -436,12 +591,15 @@ class CUrlHttp
     }
 
     /**
-    * @brief 并发多个请求GET
-    * @param $urlprefix
-    * @param $params 参数数组，每个元素将转成query并和urlprefix拼接成一个url
-    * @param $body 请求返回数据数组。若全部成功则数组大小和请求数一致
-    * @return 
-    */
+     * 并发多个请求GET
+     *
+     * @param array  $urlprefix url信息
+     * @param array  $params    参数数组，每个元素将转成query并和urlprefix拼接成一个url
+     * @param string $body      请求返回数据数组。若全部成功则数组大小和请求数一致
+     *
+     * @access public
+     * @return mixed
+     */
     public function httpMultiGet($urlprefix, $params, &$body)
     {
         // 额外header
@@ -511,11 +669,14 @@ class CUrlHttp
         return $err;
     }
     /**
-    * @brief 并发多个请求GET
-    * @param $urlArr
-    * @param $body 请求返回数据数组。若全部成功则数组大小和请求数一致
-    * @return 
-    */
+     * 并发多个请求GET
+     *
+     * @param array  $urlArr url参数
+     * @param string $body   请求返回数据数组。若全部成功则数组大小和请求数一致
+     *
+     * @access public
+     * @return mixed
+     */
     public function httpMultiUrlGet($urlArr, &$body)
     {
         $mh = curl_multi_init();
@@ -586,24 +747,21 @@ class CUrlHttp
     }
 
     /**
-     * get请求
+     * Get请求
      *
-     * @param  String $url     请求url
-     * @param  String &$body   响应文本
-     * @param  String $charset 字符集 (为空则不转换)
-     * @param  array $performanceArgs 自定义的接口监控所需要的各种参数,
-               具体可以包括如下字段:
-                  String apiName  api的名称
-                  float sampleRate  采样率
-                  String project 性能监控平台的项目token，若不指定则使用默认的token
-                  String hosts 性能监控平台parser的地址，若不指定则使用默认的host
+     * @param String $url             请求url
+     * @param String $body            响应文本
+     * @param String $charset         字符集 (为空则不转换)
+     * @param array  $performanceArgs 监控选项
+     *
+     * @access public
      * @return Mixed  false:成功; String:失败信息
      */
     public function httpGet($url, &$body, $charset = null, $performanceArgs = array())
     {
         $startTime = microtime(true);
 
-        $res = $this->httpExec($url, $body, $charset, false);
+        $res = $this->_httpExec($url, $body, $charset, false);
 
         $timeElapsed = intval((microtime(true) - $startTime) * 1000);
 
@@ -611,12 +769,15 @@ class CUrlHttp
     }
 
     /**
-    * @brief 并发多个请求POST
-    * @param $urlprefix
-    * @param $params 参数数组
-    * @param $body 请求返回数据数组。若全部成功则数组大小和请求数一致
-    * @return 
-    */
+     * 并发多个请求POST
+     *
+     * @param array  $urlprefix url信息
+     * @param array  $params    参数数组
+     * @param string $body      请求返回数据数组。若全部成功则数组大小和请求数一致
+     *
+     * @access public
+     * @return mixed
+     */
     public function httpMultiPost($urlprefix, $params, &$body)
     {
         // 额外header
@@ -685,19 +846,16 @@ class CUrlHttp
         return $err;
     }
     /**
-     * post请求
+     * Post请求
      *
-     * @param  String $url 请求url
-     * @param  Array $data post数据
-     * @param  String &$body 响应文本
-     * @param  String $charset 字符集 (为空则不转换)
-     * @param bool $isMulti
-     * @param  array $performanceArgs 自定义的接口监控所需要的各种参数,
-               具体可以包括如下字段:
-                  String apiName  api的名称
-                  float sampleRate  采样率
-                  String project 性能监控平台的项目token，若不指定则使用默认的token
-                  String hosts 性能监控平台parser的地址，若不指定则使用默认的host
+     * @param String $url             请求url
+     * @param Array  $data            post数据
+     * @param String $body            响应文本
+     * @param String $charset         字符集 (为空则不转换)
+     * @param bool   $isMulti         是否mutli格式
+     * @param array  $performanceArgs 自定义的接口监控所需要的各种参数
+     *
+     * @access public
      * @return Mixed  false:成功; String:失败信息
      */
     public function httpPost($url, $data, &$body, $charset = null, $isMulti = false, $performanceArgs = array())
@@ -707,14 +865,21 @@ class CUrlHttp
         }
         $startTime = microtime(true);
 
-        $ret = $this->httpExec($url, $body, $charset, true, $data, $isMulti);
+        $ret = $this->_httpExec($url, $body, $charset, true, $data, $isMulti);
 
         $timeElapsed = intval((microtime(true) - $startTime) * 1000);
 
         return $ret;
     }
-
-    //TODO 分析复用httpExec可行性，但目前其特殊逻辑太多，调用时无法满足需求
+    /**
+     * 分析复用_httpExec可行性，但目前其特殊逻辑太多，调用时无法满足需求
+     *
+     * @param String $url  请求url
+     * @param Array  $data post数据
+     *
+     * @access public
+     * @return Mixed
+     */
     public function httpUploadFile($url, $data)
     {
         curl_setopt($this->curl, CURLOPT_URL, $url);
@@ -742,7 +907,17 @@ class CUrlHttp
         $body = curl_exec($this->curl);
         return $body;
     }
-
+    
+    /**
+     * 调试信息
+     *
+     * @param String $method http请求方式
+     * @param String $url    请求url
+     * @param String $str    文本
+     *
+     * @access public
+     * @return Mixed
+     */
     public static function smartDebug($method, $url, $str)
     {
         if (!Core::validStringIsUtf8($str)) {
@@ -750,12 +925,17 @@ class CUrlHttp
         }
         echo '<div style="border:1px solid black; background-color:#ddd;" onclick="if (this.childNodes[1].style.display != \'block\') {this.childNodes[1].style.display = \'block\';} else {this.childNodes[1].style.display = \'none\';}  "><div>', $method, ': ', $url, '</div><div style="display:none;"><pre>', htmlspecialchars($str), '</pre></div></div>';
     }
-
+ 
     /**
-        file_get_contents 替代品
-        返回值同file_get_contents
+     * 获取内容
+     *
+     * @param String $url  请求url
+     * @param String $conf 配置
+     *
+     * @access public
+     * @return Mixed
      */
-    public static function curl_get_contents($url, $conf = array())
+    public static function curlGetContents($url, $conf = array())
     {
         $curl = new CUrlHttp($conf);
         $content = null;
@@ -766,11 +946,24 @@ class CUrlHttp
             return false;
         }
     }
-
+     /**
+     * REST接口
+     *
+     * @param String $url        请求url
+     * @param array  $data       请求数据
+     * @param int    $returnCode 响应码
+     * @param string $method     请求方式
+     * @param string $userpass   用户密码
+     * @param array  $mtAuthInfo 认证信息
+     *
+     * @access public
+     * @return Mixed
+     */
     public static function RESTRequest($url, $data = null, &$returnCode = null, $method = null, $userpass = null, $mtAuthInfo = null)
     {
         $curl = curl_init();
-        curl_setopt_array($curl, array(
+        curl_setopt_array(
+            $curl, array(
             //CURLOPT_VERBOSE => true,
             CURLOPT_ENCODING => 'gzip,deflate',
             CURLOPT_RETURNTRANSFER => true,
@@ -780,7 +973,8 @@ class CUrlHttp
             CURLOPT_TIMEOUT => 5,
             CURLOPT_URL => $url,
             CURLOPT_USERAGENT => 'MIS/1.0',
-        ));
+            )
+        );
 
         $headers = array('Content-type: application/json');
 
@@ -823,6 +1017,4 @@ class CUrlHttp
         curl_close($curl);
         return $body;
     }
-
 }
-

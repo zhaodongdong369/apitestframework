@@ -1,24 +1,62 @@
 <?php
+/**
+ * Bacenter
+ *
+ * PHP Version 5.3
+ *
+ * @category  Bacenter
+ * @package   Api
+ * @author    zhaodongdong <1562122082@qq.com>
+ * @copyright 2015 phpstudylab.cn
+ * @license   PHP Version 5.3
+ * @link      http://www.phpstudylab.cn
+ */
+
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Bacenter extends CI_Controller 
+/**
+ * Bacenter description
+ *
+ * @category   Bacenter
+ * @package    Bacenter
+ * @author     zhaodongdong <1562122082@qq.com>
+ * @copyright  1997-2005 The PHP Group
+ * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
+ * @version    Release: @package_version@
+ * @link       http://pear.php.net/package/PackageName
+ * @see        NetOther, Net_Sample::Net_Sample()
+ * @since      Class available since Release 1.2.0
+ * @deprecated Class deprecated in Release 2.0.0
+ */
+class Bacenter extends CI_Controller
 {
-    //ba中心首页
+
+    /**
+     * 首页
+     *
+     * @access public
+     * @return null
+     */
     public function index()
     {
         $user = $_SESSION['user'];
-        if($user) {
+        if ($user) {
             $this->load->view('bacenter/index', $user);
-        }else {
+        } else {
             redirect('/user/login');
         }
     }
-
-    //ba认证资料列表
+     /**
+     * Ba认证资料列表页面
+     *
+     * @access public
+     * @return null
+     */
     public function balist()
     {
         $user = $_SESSION['user'];
-        if(empty($user)) {
+        if (empty($user)) {
             redirect("/user/login");
         }
         $uid = $user['id'];
@@ -26,113 +64,146 @@ class Bacenter extends CI_Controller
         $bas = $ba_query->result();
         $this->load->view("/bacenter/list", array('bas' => $bas));
     }
-
-    //添加ba
+     /**
+     * 添加ba信息
+     *
+     * @access public
+     * @return null
+     */
     public function addba()
     {
         $user = $_SESSION['user'];
-        if(empty($user)) {
+        if (empty($user)) {
             redirect("/user/login");
         }
         $this->form_validation->set_rules('appkey', 'Appkey', 'required');    
         $this->form_validation->set_rules('secretkey', 'Secretkey', 'required');
-        if($this->form_validation->run() == FALSE) {
+        if ($this->form_validation->run() == false) {
             $this->load->view('/bacenter/addba');
-        }else {
+        } else {
             $ba = $this->balist->addBa();
             redirect('/bacenter/balist');
         }
     }
-
-    //删除ba
+     /**
+     * 删除ba信息
+     *
+     * @param int $baid baid
+     *
+     * @access public
+     * @return null
+     */
     public function delba($baid)
     {
         $user = $_SESSION['user'];
-        if(empty($user)) {
+        if (empty($user)) {
             redirect("/user/login");
         }
         $uid = $user['id'];
         $ba_query = $this->db->query("select * from balist where id={$baid} and  userid={$uid} and status=1");
-        if(empty($ba_query)) {
+        if (empty($ba_query)) {
             redirect("/bacenter/balist");
         }
         $bas = $ba_query->result();
-        if(count($bas) > 0) {
+        if (count($bas) > 0) {
             $ba = $bas[0];        
             $delquery = $this->db->query("update balist set status=0 where id={$baid}");
         }
         redirect("/bacenter/balist");
     }
-  
-    //更新ba
+    /**
+     * 更新ba信息
+     *
+     * @param int $baid baid
+     *
+     * @access public
+     * @return null
+     */
     public function updateba($baid)
     {
         $user = $_SESSION['user'];
-        if(empty($user)) {
+        if (empty($user)) {
             redirect("/user/login");
         }
         $this->form_validation->set_rules('appkey', 'Appkey', 'required');    
         $this->form_validation->set_rules('secretkey', 'Secretkey', 'required');
         $uid = $user['id'];
         $ba_query = $this->db->query("select * from balist where id={$baid} and  userid={$uid} and status=1");
-        if(empty($ba_query)) {
+        if (empty($ba_query)) {
             redirect("/bacenter/balist");
         }
         $bas = $ba_query->result();
         $ba = null;
-        if(count($bas)) {
+        if (count($bas)) {
             $ba = $bas[0];
         }
-        if(!$ba || $this->form_validation->run() == FALSE) {
+        if (!$ba || $this->form_validation->run() == false) {
             $this->load->view('/bacenter/updateba', array('ba' => $ba));
-        }else {
+        } else {
             $this->balist->updateBa($baid);
             redirect("/bacenter/balist");
         }
     }
 
-    
-    //添加api
+     /**
+     * 添加ba信息
+     *
+     * @access public
+     * @return null
+     */
     public function addapi()
     {
         $user = $_SESSION['user'];
-        if(empty($user)) {
+        if (empty($user)) {
             redirect("/user/login");
         }
         $this->form_validation->set_rules('url', 'Url', 'required');    
-        if($this->form_validation->run() == FALSE) {
+        if ($this->form_validation->run() == false) {
             $this->load->view('/bacenter/addapi');
-        }else {
+        } else {
             $api = $this->apilist->addApi();
             redirect("/bacenter/apilist");
         }
     }
-    
-    //删除api
+     /**
+     * 删除ba信息
+     *
+     * @param int $apiid api主键
+     *
+     * @access public
+     * @return null
+     */
     public function delapi($apiid)
     {
         $user = $_SESSION['user'];
-        if(empty($user)) {
+        if (empty($user)) {
             redirect("/user/login");
         }
         $uid = $user['id'];
         $api_query = $this->db->query("select * from apilist where id={$apiid} and  userid={$uid} and status=1");
-        if(empty($api_query)) {
+        if (empty($api_query)) {
             redirect("/bacenter/apilist");
         }
         $apis = $api_query->result();
-        if(count($apis) > 0) {
+        if (count($apis) > 0) {
             $api = $apis[0];        
             $delquery = $this->db->query("update apilist set status=0  where id={$apiid}");
         }
         redirect("/bacenter/apilist");
     }
     
-    //更新api
+     /**
+     * 更新ba信息
+     *
+     * @param int $apiid api主键
+     *
+     * @access public
+     * @return null
+     */
     public function updateapi($apiid)
     {
         $user = $_SESSION['user'];
-        if(empty($user)) {
+        if (empty($user)) {
             redirect("/user/login");
         }
         $this->form_validation->set_rules('url', 'Url', 'required');    
@@ -140,22 +211,26 @@ class Bacenter extends CI_Controller
         $api_query = $this->db->query("select * from apilist where id={$apiid} and  userid={$uid}");
         $apis = $api_query->result();
         $api = null;
-        if(count($apis)) {
+        if (count($apis)) {
             $api = $apis[0];
         }
-        if(!$api || $this->form_validation->run() == FALSE) {
+        if (!$api || $this->form_validation->run() == false) {
             $this->load->view('/bacenter/updateapi', array('api' => $api));
-        }else {
+        } else {
             $api = $this->apilist->updateApi($apiid);
             redirect("/bacenter/apilist");
         }
     }
-
-    //api列表
+     /**
+     * Api列表信息
+     *
+     * @access public
+     * @return null
+     */
     public function apilist()
     {
         $user = $_SESSION['user'];
-        if(empty($user)) {
+        if (empty($user)) {
             redirect("/user/login");
         }
         $uid = $user['id'];
@@ -163,12 +238,16 @@ class Bacenter extends CI_Controller
         $apis = $api_query->result();
         $this->load->view("/bacenter/apilist", array('apis' => $apis));
     }
-
-    //api测试 
+     /**
+     * 测试api接口
+     *
+     * @access public
+     * @return null
+     */
     public function testapi()
     {
         $user = $_SESSION['user'];
-        if(empty($user)) {
+        if (empty($user)) {
             redirect("/user/login");
         }
         $uid = $user['id'];
@@ -183,18 +262,18 @@ class Bacenter extends CI_Controller
             );
         $this->form_validation->set_rules('api', 'Api', 'required');    
         $this->form_validation->set_rules('ba', 'Ba', 'required');
-        if($this->form_validation->run() == FALSE) {
+        if ($this->form_validation->run() == false) {
             $this->load->view('/bacenter/testapi', $vars);
-        }else {
-            require 'CUrlHttp.php';
+        } else {
+            include 'CUrlHttp.php';
             $url = $_POST['api'];
             $ba_query  = $this->db->query("select id,appkey,secretkey from balist where id={$_POST['ba']}");
-            if(empty($url)) {
+            if (empty($url)) {
                 $this->load->view("/bacenter/testapi", $vars);
                 return;
             }
             $ba = $ba_query->result();
-            if(empty($ba)) {
+            if (empty($ba)) {
                 $this->load->view("/bacenter/testapi", $vars);
                 return;
             }
@@ -210,6 +289,5 @@ class Bacenter extends CI_Controller
             $this->load->view("/bacenter/testapi", $vars);
         }
     }
-
 
 }
