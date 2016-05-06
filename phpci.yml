@@ -15,6 +15,6 @@ test:
          - 'app/views'
          - 'PHPCI/*'
         standard: 'PEAR'
-        allowed_warnings: 10
-        allowed_errors: 3
+        allowed_warnings: 2
+        allowed_errors: -1
         path: '/usr/bin/phpcs'
