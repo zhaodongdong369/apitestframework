@@ -11,6 +11,7 @@ build_settings:
 test:
     php_code_sniffer:
         path: 'app/controllers'
+        standard: '/phpcs.xml'
         ignore: 'app/views'
         standard: 'PEAR'
         allowed_warnings: 10
