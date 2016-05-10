@@ -112,7 +112,9 @@ class Bacenter extends CI_Controller
         $bas = $ba_query->result();
         if (count($bas) > 0) {
             $ba = $bas[0];        
-            $delquery = $this->db->query("update balist set status=0 where id={$baid}");
+            $delquery = $this->db->query(
+                "update balist set status=0 where id={$baid}"
+            );
         }
         redirect("/bacenter/balist");
     }
@@ -249,7 +251,9 @@ class Bacenter extends CI_Controller
             redirect("/user/login");
         }
         $uid = $user['id'];
-        $api_query = $this->db->query("select * from apilist where userid={$uid} and status=1");
+        $api_query = $this->db->query(
+            "select * from apilist where userid={$uid} and status=1"
+        );
         $apis = $api_query->result();
         $this->load->view("/bacenter/apilist", array('apis' => $apis));
     }
@@ -266,8 +270,12 @@ class Bacenter extends CI_Controller
             redirect("/user/login");
         }
         $uid = $user['id'];
-        $api_query = $this->db->query("select id,url,args from apilist where userid={$uid} and status=1");
-        $ba_query  = $this->db->query("select id,appkey from balist where userid={$uid} and status=1");
+        $api_query = $this->db->query(
+            "select id,url,args from apilist where userid={$uid} and status=1"
+        );
+        $ba_query  = $this->db->query(
+            "select id,appkey from balist where userid={$uid} and status=1"
+        );
         $apis = $api_query->result();
         $bas = $ba_query->result();
         $vars = array(
@@ -282,7 +290,9 @@ class Bacenter extends CI_Controller
         } else {
             $this->load->library('CUrlHttp');
             $url = $_POST['api'];
-            $ba_query  = $this->db->query("select id,appkey,secretkey from balist where id={$_POST['ba']}");
+            $ba_query  = $this->db->query(
+                "select id,appkey,secretkey from balist where id={$_POST['ba']}"
+            );
             if (empty($url)) {
                 $this->load->view("/bacenter/testapi", $vars);
                 return;
@@ -299,7 +309,9 @@ class Bacenter extends CI_Controller
                 );
             $retcode = 0;
             $curl = new CUrlHttp();
-            $ret  = $curl->RESTRequest($url, $_POST['args'], $retcode,  $_POST['HTTP'], null, $authinfo);
+            $ret  = $curl->RESTRequest(
+                $url, $_POST['args'], $retcode,  $_POST['HTTP'], null, $authinfo
+            );
             $vars['result'] = $ret;
             $this->load->view("/bacenter/testapi", $vars);
         }
