@@ -81,10 +81,18 @@ class User extends CI_Controller
     */
     public function register()
     {
-        $this->form_validation->set_rules('username', 'Username', 'required|min_length[5]|max_length[20]');    
-        $this->form_validation->set_rules('password', 'Password', 'required');
-        $this->form_validation->set_rules('passconf', 'Password confirmation', 'required|matches[password]');
-        $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[apiuser.email]');
+        $this->form_validation->set_rules(
+            'username', 'Username', 'required|min_length[5]|max_length[20]'
+        );    
+        $this->form_validation->set_rules(
+            'password', 'Password', 'required'
+        );
+        $this->form_validation->set_rules(
+            'passconf', 'Password confirmation', 'required|matches[password]'
+        );
+        $this->form_validation->set_rules(
+            'email', 'Email', 'required|valid_email|is_unique[apiuser.email]'
+        );
         if ($this->form_validation->run() == false) {
             $this->load->view('user/register.php');
         } else {
@@ -113,7 +121,10 @@ class User extends CI_Controller
                 'salt' => 'jsadf32^$&jasdfouppawefjwaof22342432adsfa'
             )
         );
-        $query = $this->db->query("select id,name,email from apiuser where name='{$username}' and passhash='{$hash}' and status=1");
+        $query = $this->db->query(
+            "select id,name,email from apiuser where 
+             name='{$username}' and passhash='{$hash}' and status=1"
+        );
         return $query->row_array();
     }
     

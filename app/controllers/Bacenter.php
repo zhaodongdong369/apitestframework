@@ -60,7 +60,9 @@ class Bacenter extends CI_Controller
             redirect("/user/login");
         }
         $uid = $user['id'];
-        $ba_query = $this->db->query("select * from balist where userid={$uid} and status=1");
+        $ba_query = $this->db->query(
+            "select * from balist where userid={$uid} and status=1"
+        );
         $bas = $ba_query->result();
         $this->load->view("/bacenter/list", array('bas' => $bas));
     }
@@ -100,7 +102,10 @@ class Bacenter extends CI_Controller
             redirect("/user/login");
         }
         $uid = $user['id'];
-        $ba_query = $this->db->query("select * from balist where id={$baid} and  userid={$uid} and status=1");
+        $ba_query = $this->db->query(
+            "select * from balist where id={$baid} 
+             and  userid={$uid} and status=1"
+        );
         if (empty($ba_query)) {
             redirect("/bacenter/balist");
         }
@@ -128,7 +133,10 @@ class Bacenter extends CI_Controller
         $this->form_validation->set_rules('appkey', 'Appkey', 'required');    
         $this->form_validation->set_rules('secretkey', 'Secretkey', 'required');
         $uid = $user['id'];
-        $ba_query = $this->db->query("select * from balist where id={$baid} and  userid={$uid} and status=1");
+        $ba_query = $this->db->query(
+            "select * from balist where id={$baid} 
+            and  userid={$uid} and status=1"
+        );
         if (empty($ba_query)) {
             redirect("/bacenter/balist");
         }
@@ -180,14 +188,19 @@ class Bacenter extends CI_Controller
             redirect("/user/login");
         }
         $uid = $user['id'];
-        $api_query = $this->db->query("select * from apilist where id={$apiid} and  userid={$uid} and status=1");
+        $api_query = $this->db->query(
+            "select * from apilist where id={$apiid} 
+             and  userid={$uid} and status=1"
+        );
         if (empty($api_query)) {
             redirect("/bacenter/apilist");
         }
         $apis = $api_query->result();
         if (count($apis) > 0) {
             $api = $apis[0];        
-            $delquery = $this->db->query("update apilist set status=0  where id={$apiid}");
+            $delquery = $this->db->query(
+                "update apilist set status=0  where id={$apiid}"
+            );
         }
         redirect("/bacenter/apilist");
     }
@@ -208,7 +221,9 @@ class Bacenter extends CI_Controller
         }
         $this->form_validation->set_rules('url', 'Url', 'required');    
         $uid = $user['id'];
-        $api_query = $this->db->query("select * from apilist where id={$apiid} and  userid={$uid}");
+        $api_query = $this->db->query(
+            "select * from apilist where id={$apiid} and  userid={$uid}"
+        );
         $apis = $api_query->result();
         $api = null;
         if (count($apis)) {

@@ -63,10 +63,19 @@ class Testapi extends CI_Controller
         if (!isset(self::$ARR_BASICAUTH_USER[$client_id])) {
             die('WRONG CLIENT_ID');
         }
-        defined('URI') ? '' : define('URI', isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '');
+        defined('URI') ? '' : 
+        define(
+            'URI', isset(
+                $_SERVER['REQUEST_URI']
+            ) ? $_SERVER['REQUEST_URI'] : ''
+        );
         $client_secret = self::$ARR_BASICAUTH_USER[$client_id];
         $string_to_sign = 'GET'.' '.URI . "\n" . $date;
-        $signature = base64_encode(hash_hmac('sha1', $string_to_sign, $client_secret, true));
+        $signature = base64_encode(
+            hash_hmac(
+                'sha1', $string_to_sign, $client_secret, true
+            )
+        );
         if ($signature !== $arr_split[1]) {
             die('WRONG SIGNATURE');
         }
