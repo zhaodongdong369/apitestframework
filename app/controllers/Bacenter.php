@@ -265,7 +265,7 @@ class Bacenter extends CI_Controller
         if ($this->form_validation->run() == false) {
             $this->load->view('/bacenter/testapi', $vars);
         } else {
-            include 'CUrlHttp.php';
+            $this->load->library('CUrlHttp');
             $url = $_POST['api'];
             $ba_query  = $this->db->query("select id,appkey,secretkey from balist where id={$_POST['ba']}");
             if (empty($url)) {
