@@ -18,3 +18,6 @@ test:
         allowed_warnings: 2
         allowed_errors: -1
         path: '/usr/bin/phpcs'
+    php_unit:
+        config:
+            - "phpunit.xml"
