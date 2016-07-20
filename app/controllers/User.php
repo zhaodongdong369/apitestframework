@@ -134,7 +134,7 @@ class User extends CI_Controller
      * @access public
      * @return null
      */
-    public function logout()
+    public function logout($a=1,$b=2)
     {
         unset($_SESSION['user']);
         redirect("/user/login");
